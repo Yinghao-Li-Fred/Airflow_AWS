@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+
+  airflow-webserver:
+    image: airflow0522:latest
+    container_name: airflow_webserver
+    environment:
+      - LOAD_EX=n
+      - EXECUTOR=LocalExecutor
+      - AWS_ACCESS_KEY_ID=
+      - AWS_SECRET_ACCESS_KEY=
+    volumes:
+      - ./airflow:/opt/airflow
+    ports:
+      - "8081:8080"
+    command: webserver
+    depends_on:
+      - airflow-scheduler
+
+  airflow-scheduler:
+    image: airflow0522:latest
+    container_name: airflow_scheduler
+    environment:
+      - LOAD_EX=n
+      - EXECUTOR=LocalExecutor
+      - AWS_ACCESS_KEY_ID=
+      - AWS_SECRET_ACCESS_KEY=
+    volumes:
+      - ./airflow:/opt/airflow
+    command: scheduler
+
+volumes:
+  airflow:
+    driver: local
